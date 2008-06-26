@@ -18,13 +18,15 @@ class jetty {
 }
 
 class jetty::base {
-    package{'jetty':
+    # we put rpms from http://dist.codehaus.org/jetty/jetty-6.1.11/rpms/
+    # in our own repo
+    package{ ['jetty6', 'jetty6-core', 'jetty6-servlet-2.5-api' ]:
         ensure => present,
     }
-    service{jetty:
+    service{'jetty6':
         ensure => running,
         enable => true,
         hasstatus => true,
-        require => Package[jetty],
+        require => Package['jetty6'],
     }
 }
