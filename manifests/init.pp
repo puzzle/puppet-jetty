@@ -39,7 +39,7 @@ class jetty::base {
         source => "puppet://$server/jetty/init.d/jetty6",
         require => Package['jetty6'],
         before => Service['jetty6'],
-        user => root, owner => 0, mode => 0755;
+        owner => root, group => 0, mode => 0755;
     }
 
     service{'jetty6':
