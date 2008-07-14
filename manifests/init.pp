@@ -23,6 +23,16 @@ class jetty::base {
     package{ ['jetty6', 'jetty6-core', 'jetty6-servlet-2.5-api' ]:
         ensure => present,
     }
+
+    file{'/etc/jetty6/jetty.xml':
+        source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty.xml",
+                    "puppet://$server/files/jetty/config/jetty.xml",
+                    "puppet://$server/jetty/config/jetty.xml" ],
+        require => Package['jetty6'],
+        notify => Service['jetty6'],
+        owner => root, group => 0, mode => 0644;
+    }
+
     service{'jetty6':
         ensure => running,
         enable => true,
