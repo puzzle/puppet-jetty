@@ -33,6 +33,15 @@ class jetty::base {
         owner => root, group => 0, mode => 0644;
     }
 
+    # original jetty6 lacks some good features for chkconfig
+    # and hasstatus
+    file{'/etc/init.d/jetty6':
+        source => "puppet://$server/jetty/init.d/jetty6",
+        require => Package['jetty6'],
+        before => Service['jetty6'],
+        user => root, owner => 0, mode => 0755;
+    }
+
     service{'jetty6':
         ensure => running,
         enable => true,
