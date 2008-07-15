@@ -33,16 +33,6 @@ class jetty::base {
         owner => root, group => 0, mode => 0644;
     }
 
-    file{'/etc/jetty6/jetty-ssl.xml':
-        source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty-ssl.xml",
-                    "puppet://$server/files/jetty/config/jetty-ssl.xml",
-                    "puppet://$server/jetty/config/jetty-ssl.xml" ],
-        require => Package['jetty6'],
-        notify => Service['jetty6'],
-        owner => root, group => 0, mode => 0644;
-    }
-
-    
     # original jetty6 lacks some good features for chkconfig
     # and hasstatus
     file{'/etc/init.d/jetty6':
@@ -58,4 +48,24 @@ class jetty::base {
         hasstatus => true,
         require => Package['jetty6'],
     }
+}
+
+# enabled ssl for jetty
+class jetty::ssl {
+    file{'/etc/jetty6/jetty-ssl.xml':
+        source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty-ssl.xml",
+                    "puppet://$server/files/jetty/config/jetty-ssl.xml",
+                    "puppet://$server/jetty/config/jetty-ssl.xml" ],
+        require => Package['jetty6'],
+        notify => Service['jetty6'],
+        owner => root, group => 0, mode => 0644;
+    }
+
+    line { enable_jetty_ssl:
+        file => '/etc/jetty6/jetty.conf',
+        line => '/etc/jetty6/jetty-ssl.xml',
+        ensure => present,
+        notify => Service[munin-node],
+        require => Package[munin-node],
+  }
 }
