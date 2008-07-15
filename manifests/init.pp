@@ -24,6 +24,24 @@ class jetty::base {
         ensure => present,
     }
 
+    user{'jetty':
+        ensure => present,
+        allowdupe => false,
+        comment => 'Jetty User',
+        shell => '/bin/bash',
+        home => '/usr/share/jetty6',
+        require => Package['jetty6'],
+    }
+
+    file{'/etc/default/jetty':
+        source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty.default",
+                    "puppet://$server/files/jetty/config/jetty.default",
+                    "puppet://$server/jetty/config/jetty.default" ],
+        require => Package['jetty6'],
+        notify => Service['jetty6'],
+        owner => root, group => 0, mode => 0644;
+    }
+
     file{'/etc/jetty6/jetty.xml':
         source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty.xml",
                     "puppet://$server/files/jetty/config/jetty.xml",
