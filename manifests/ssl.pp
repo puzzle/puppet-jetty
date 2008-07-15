@@ -14,8 +14,8 @@ class jetty::ssl {
         file => '/etc/jetty6/jetty.conf',
         line => '/etc/jetty6/jetty-ssl.xml',
         ensure => present,
-        notify => Service[munin-node],
-        require => Package[munin-node],
+        notify => Service['jetty6'],
+        require => File['/etc/jetty6/jetty-ssl.xml'],
   }
 }
 
