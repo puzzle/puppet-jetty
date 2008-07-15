@@ -33,6 +33,12 @@ class jetty::base {
         require => Package['jetty6'],
     }
 
+    file{'/var/log/jetty6':
+        ensure => directory,
+        owner => jetty, group => jetty, mode => 0755;
+    }
+        
+
     file{'/etc/default/jetty':
         source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty.default",
                     "puppet://$server/files/jetty/config/jetty.default",

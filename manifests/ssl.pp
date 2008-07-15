@@ -5,9 +5,9 @@ class jetty::ssl {
         source => [ "puppet://$server/files/jetty/config/${fqdn}/jetty-ssl.xml",
                     "puppet://$server/files/jetty/config/jetty-ssl.xml",
                     "puppet://$server/jetty/config/jetty-ssl.xml" ],
-        require => Package['jetty6'],
+        require => [ Package['jetty6'], User['jetty'] ],
         notify => Service['jetty6'],
-        owner => root, group => 0, mode => 0644;
+        owner => jetty, group => jetty, mode => 0644;
     }
 
     line { enable_jetty_ssl:
